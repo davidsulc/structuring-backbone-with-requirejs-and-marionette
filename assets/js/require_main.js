@@ -3,6 +3,7 @@ requirejs.config({
   paths: {
     backbone: "vendor/backbone",
     jquery: "vendor/jquery",
+    "jquery-ui": "vendor/jquery-ui",
     json2: "vendor/json2",
     marionette: "vendor/backbone.marionette",
     underscore: "vendor/underscore"
@@ -19,12 +20,11 @@ requirejs.config({
     marionette: {
       deps: ["backbone"],
       exports: "Marionette"
-    }
+    },
+    "jquery-ui": ["jquery"]
   }
 });
 
-require(["marionette"], function(bbm){
-  console.log("jQuery version: ", $.fn.jquery);
-  console.log("underscore identity call: ", _.identity(5));
-  console.log("Marionette: ", bbm);
+require(["app"], function(ContactManager){
+  ContactManager.start();
 });
