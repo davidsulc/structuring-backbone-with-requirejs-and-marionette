@@ -18,6 +18,28 @@ define(["app", "apps/contacts/list/list_view"], function(ContactManager, View){
               contactsListLayout.contactsRegion.show(contactsListView);
             });
 
+            contactsListView.on("itemview:contact:edit", function(childView, args){
+              require(["apps/contacts/edit/edit_view"], function(EditView){
+                var model = args.model;
+                var view = new EditView.Contact({
+                  model: model
+                });
+
+                view.on("form:submit", function(data){
+                  if(model.save(data)){
+                    childView.render();
+                    view.trigger("dialog:close");
+                    childView.flash("success");
+                  }
+                  else{
+                    view.triggerMethod("form:data:invalid", model.validationError);
+                  }
+                });
+
+                ContactManager.dialogRegion.show(view);
+              });
+            });
+
             contactsListView.on("itemview:contact:delete", function(childView, args){
               args.model.destroy();
             });
