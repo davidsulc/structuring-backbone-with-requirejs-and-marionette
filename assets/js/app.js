@@ -20,7 +20,7 @@ define(["marionette", "apps/config/marionette/regions/dialog"], function(Marione
 
   ContactManager.on("initialize:after", function(){
     if(Backbone.history){
-      require(["apps/contacts/contacts_app"], function () {
+      require(["apps/contacts/contacts_app", "apps/about/about_app"], function () {
         Backbone.history.start();
 
         if(ContactManager.getCurrentRoute() === ""){
