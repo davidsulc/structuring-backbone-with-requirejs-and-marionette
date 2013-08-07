@@ -45,7 +45,7 @@ define(["marionette", "jquery-ui"], function(Marionette){
 
   ContactManager.on("start", function(){
     if(Backbone.history){
-      require(["apps/contacts/contacts_app"], function () {
+      require(["apps/contacts/contacts_app", "apps/about/about_app"], function () {
         Backbone.history.start();
 
         if(ContactManager.getCurrentRoute() === ""){
