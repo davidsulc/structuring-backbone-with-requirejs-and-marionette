@@ -10,6 +10,7 @@ define(["app"], function(ContactManager){
       showAbout: function(){
         require(["apps/about/show/show_controller"], function(ShowController){
           ShowController.showAbout();
+          ContactManager.execute("set:active:header", "about");
         });
       }
     };
