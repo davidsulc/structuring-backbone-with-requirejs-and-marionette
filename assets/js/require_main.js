@@ -2,6 +2,7 @@ requirejs.config({
   baseUrl: "assets/js",
   paths: {
     backbone: "vendor/backbone",
+    "backbone.picky": "vendor/backbone.picky",
     "backbone.syphon": "vendor/backbone.syphon",
     jquery: "vendor/jquery",
     "jquery-ui": "vendor/jquery-ui",
@@ -22,6 +23,7 @@ requirejs.config({
       deps: ["jquery", "underscore", "json2"],
       exports: "Backbone"
     },
+    "backbone.picky": ["backbone"],
     "backbone.syphon": ["backbone"],
     marionette: {
       deps: ["backbone"],
@@ -33,6 +35,6 @@ requirejs.config({
   }
 });
 
-require(["app"], function(ContactManager){
+require(["app", "apps/header/header_app"], function(ContactManager){
   ContactManager.start();
 });
