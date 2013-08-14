@@ -1,6 +1,18 @@
 define(["app"], function(ContactManager){
   ContactManager.module("ContactsApp", function(ContactsApp, ContactManager, Backbone, Marionette, $, _){
-    ContactsApp.Router = Marionette.AppRouter.extend({
+    ContactsApp.startWithParent = false;
+
+    ContactsApp.onStart = function(){
+      console.log("starting ContactsApp");
+    };
+
+    ContactsApp.onStop = function(){
+      console.log("stopping ContactsApp");
+    };
+  });
+
+  ContactManager.module("Routers.ContactsApp", function(ContactsAppRouter, ContactManager, Backbone, Marionette, $, _){
+    ContactsAppRouter.Router = Marionette.AppRouter.extend({
       appRoutes: {
         "contacts(/filter/criterion::criterion)": "listContacts",
         "contacts/:id": "showContact",
@@ -8,25 +20,28 @@ define(["app"], function(ContactManager){
       }
     });
 
+    var executeAction = function(action, arg){
+      ContactManager.startSubApp("ContactsApp");
+      action(arg);
+      ContactManager.execute("set:active:header", "contacts");
+    };
+
     var API = {
       listContacts: function(criterion){
         require(["apps/contacts/list/list_controller"], function(ListController){
-          ListController.listContacts(criterion);
-          ContactManager.execute("set:active:header", "contacts");
+          executeAction(ListController.listContacts, criterion);
         });
       },
 
       showContact: function(id){
         require(["apps/contacts/show/show_controller"], function(ShowController){
-          ShowController.showContact(id);
-          ContactManager.execute("set:active:header", "contacts");
+          executeAction(ShowController.showContact, id);
         });
       },
 
       editContact: function(id){
         require(["apps/contacts/edit/edit_controller"], function(EditController){
-          EditController.editContact(id);
-          ContactManager.execute("set:active:header", "contacts");
+          executeAction(EditController.editContact, id);
         });
       }
     };
@@ -56,11 +71,11 @@ define(["app"], function(ContactManager){
     });
 
     ContactManager.addInitializer(function(){
-      new ContactsApp.Router({
+      new ContactsAppRouter.Router({
         controller: API
       });
     });
   });
 
-  return ContactManager.ContactsApp;
+  return ContactManager.ContactsAppRouter;
 });
