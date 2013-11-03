@@ -69,6 +69,10 @@ class ContactsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def contact_params
+      if parameters=params
+        params = process_params(parameters, "contact")
+        puts "params after processing: #{params}"
+      end
       params.require(:contact).permit(:first_name, :last_name, :phone_number)
     end
 end
