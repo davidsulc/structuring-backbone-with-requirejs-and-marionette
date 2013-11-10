@@ -77,4 +77,7 @@ ContactManager::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+
+  # use camel case for the API
+  Jbuilder.key_format camelize: :lower
 end
