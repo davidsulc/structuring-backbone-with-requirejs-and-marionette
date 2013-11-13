@@ -1,4 +1,4 @@
-class ContactsController < ApplicationController
+class ContactsLegacyController < ApplicationController
   before_action :set_contact, only: [:show, :edit, :update, :destroy]
 
   # GET /contacts
@@ -69,7 +69,7 @@ class ContactsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def contact_params
-      if parameters=params
+      if parameters=params['data']
         params = process_params(parameters, "contact")
       end
       params.require(:contact).permit(:first_name, :last_name, :phone_number)
