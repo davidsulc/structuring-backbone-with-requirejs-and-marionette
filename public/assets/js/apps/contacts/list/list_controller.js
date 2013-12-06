@@ -53,8 +53,13 @@ ContactManager.module("ContactsApp.List", function(List, ContactManager, Backbon
           });
 
           view.on("form:submit", function(data){
-            var highestId = contacts.max(function(c){ return c.id; }).get("id");
-            data.id = highestId + 1;
+            if(contacts.length > 0){
+              var highestId = contacts.max(function(c){ return c.id; }).get("id");
+              data.id = highestId + 1;
+            }
+            else{
+              data.id = 1;
+            }
             if(newContact.save(data)){
               contacts.add(newContact);
               view.trigger("dialog:close");
