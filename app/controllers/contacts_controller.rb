@@ -1,6 +1,8 @@
 class ContactsController < ApplicationController
   before_action :set_contact, only: [:show, :edit, :update, :destroy]
 
+  respond_to :json
+
   # GET /contacts
   # GET /contacts.json
   def index
@@ -10,6 +12,7 @@ class ContactsController < ApplicationController
   # GET /contacts/1
   # GET /contacts/1.json
   def show
+    respond_with(@contact)
   end
 
   # GET /contacts/new
@@ -32,7 +35,7 @@ class ContactsController < ApplicationController
         format.json { render action: 'show', status: :created, location: @contact }
       else
         format.html { render action: 'new' }
-        format.json { render json: @contact.errors, status: :unprocessable_entity }
+        format.json { render json: { entity: @contact, errors: @contact.errors }, status: :unprocessable_entity }
       end
     end
   end
@@ -40,13 +43,14 @@ class ContactsController < ApplicationController
   # PATCH/PUT /contacts/1
   # PATCH/PUT /contacts/1.json
   def update
+    @old_contact = @contact.dup
     respond_to do |format|
       if @contact.update(contact_params)
         format.html { redirect_to @contact, notice: 'Contact was successfully updated.' }
         format.json { render action: 'show', status: :ok, location: @contact }
       else
         format.html { render action: 'edit' }
-        format.json { render json: @contact.errors, status: :unprocessable_entity }
+        format.json { render json: { entity: @old_contact, errors: @contact.errors }, status: :unprocessable_entity }
       end
     end
   end
