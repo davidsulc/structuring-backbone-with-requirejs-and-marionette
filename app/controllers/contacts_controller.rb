@@ -35,7 +35,7 @@ class ContactsController < ApplicationController
         format.json { render action: 'show', status: :created, location: @contact }
       else
         format.html { render action: 'new' }
-        format.json { render json: { entity: @contact, errors: @contact.errors }, status: :unprocessable_entity }
+        format.json { render json: { entity: @contact, errors: @contact.errors_json }, status: :unprocessable_entity }
       end
     end
   end
@@ -50,7 +50,7 @@ class ContactsController < ApplicationController
         format.json { render action: 'show', status: :ok, location: @contact }
       else
         format.html { render action: 'edit' }
-        format.json { render json: { entity: @old_contact, errors: @contact.errors }, status: :unprocessable_entity }
+        format.json { render json: { entity: @old_contact, errors: @contact.errors_json }, status: :unprocessable_entity }
       end
     end
   end

@@ -16,4 +16,14 @@ class Contact < ActiveRecord::Base
   def to_json(options={})
     to_builder.target!
   end
+
+  def errors_json(options={})
+    result = {}
+    return result if @errors.empty?
+
+    @attributes.keys.reject{|a| a == "id"}.each{|attr|
+      result[attr.camelize(:lower)] = @errors[attr] unless @errors[attr].blank?
+    }
+    result
+  end
 end
