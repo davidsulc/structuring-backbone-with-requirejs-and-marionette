@@ -9,6 +9,9 @@ gem 'sqlite3', group: [:development, :test]
 # Use postgresql if deploying on Heroku
 gem 'pg', group: :production
 
+# Use improved Faker gem to generate (e.g.) fake contacts
+gem 'ffaker'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 
