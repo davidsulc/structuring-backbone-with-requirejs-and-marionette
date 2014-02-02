@@ -6,7 +6,8 @@ define(["app", "apps/config/storage/localstorage"], function(ContactManager){
       defaults: {
         firstName: "",
         lastName: "",
-        phoneNumber: ""
+        phoneNumber: "",
+        gender : ''
       },
 
       validate: function(attrs, options) {
