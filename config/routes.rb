@@ -1,5 +1,5 @@
 ContactManager::Application.routes.draw do
-  resources :contacts, :contacts_legacy
+  resources :contacts, :contacts_legacy, :contacts_paginated
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
