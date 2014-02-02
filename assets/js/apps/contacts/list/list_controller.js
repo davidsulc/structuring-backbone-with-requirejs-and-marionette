@@ -7,7 +7,6 @@ define(["app", "apps/contacts/list/list_view"], function(ContactManager, View){
           ContactManager.mainRegion.show(loadingView);
 
           var fetchingContacts = ContactManager.request("contact:entities");
-
           var contactsListLayout = new View.Layout();
           var contactsListPanel = new View.Panel();
 
@@ -42,6 +41,12 @@ define(["app", "apps/contacts/list/list_view"], function(ContactManager, View){
                 filteredContacts.filter(filterCriterion);
                 ContactManager.trigger("contacts:filter", filterCriterion);
               });
+
+              /*contactsListPanel.on("contacts:gender", function(){
+                //filteredContacts.filter(filterCriterion);
+                ContactManager.trigger("contact:gender");
+                console.log('yes man ');
+              });*/
 
               contactsListLayout.on("show", function(){
                 contactsListLayout.panelRegion.show(contactsListPanel);

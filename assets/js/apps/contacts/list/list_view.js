@@ -6,6 +6,7 @@ define(["app",
         "tpl!apps/contacts/list/templates/list_item.tpl"],
        function(ContactManager, layoutTpl, panelTpl, noneTpl, listTpl, listItemTpl){
   ContactManager.module("ContactsApp.List.View", function(View, ContactManager, Backbone, Marionette, $, _){
+    
     View.Layout = Marionette.Layout.extend({
       template: layoutTpl,
 
@@ -23,11 +24,17 @@ define(["app",
       },
 
       events: {
-        "submit #filter-form": "filterContacts"
+        "submit #filter-form": "filterContacts",
+        'click .js-gender' : 'showGenderPage'
       },
 
       ui: {
         criterion: "input.js-filter-criterion"
+      },
+
+      showGenderPage : function(e){
+        e.preventDefault();
+        ContactManager.trigger("contacts:gender");
       },
 
       filterContacts: function(e){

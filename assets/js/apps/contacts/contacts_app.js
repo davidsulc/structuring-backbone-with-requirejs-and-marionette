@@ -15,6 +15,7 @@ define(["app"], function(ContactManager){
     ContactsAppRouter.Router = Marionette.AppRouter.extend({
       appRoutes: {
         "contacts(/filter/criterion::criterion)": "listContacts",
+        "contacts/gender": "genderContact",
         "contacts/:id": "showContact",
         "contacts/:id/edit": "editContact"
       }
@@ -43,6 +44,13 @@ define(["app"], function(ContactManager){
         require(["apps/contacts/edit/edit_controller"], function(EditController){
           executeAction(EditController.editContact, id);
         });
+      },
+
+      genderContact: function(id){
+        console.log( 'gender Coontact Route' );
+        require(["apps/contacts/gender/gender_controller"], function(GenderController){
+          GenderController.genderContact();
+        });
       }
     };
 
@@ -50,6 +58,7 @@ define(["app"], function(ContactManager){
       ContactManager.navigate("contacts");
       API.listContacts();
     });
+
 
     ContactManager.on("contacts:filter", function(criterion){
       if(criterion){
@@ -70,6 +79,11 @@ define(["app"], function(ContactManager){
       API.editContact(id);
     });
 
+    ContactManager.on("contacts:gender", function(id){
+      ContactManager.navigate("contacts/gender");
+      API.genderContact();
+    });
+
     ContactManager.addInitializer(function(){
       new ContactsAppRouter.Router({
         controller: API
@@ -79,3 +93,4 @@ define(["app"], function(ContactManager){
 
   return ContactManager.ContactsAppRouter;
 });
+3

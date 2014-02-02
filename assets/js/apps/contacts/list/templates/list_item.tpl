@@ -1,3 +1,4 @@
+<td><%= (gender != ''  ? (gender == '0' ? 'Male' : 'Female') : '' ) %></td>
 <td><%= firstName %></td>
 <td><%= lastName %></td>
 <td>
