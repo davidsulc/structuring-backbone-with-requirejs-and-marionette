@@ -1,5 +1,15 @@
 ContactManager::Application.routes.draw do
-  resources :contacts, :contacts_legacy, :contacts_paginated
+  resources :contacts_paginated do
+    member do
+      get 'acquaintances'
+      get 'strangers'
+    end
+  end
+
+  resources :contacts_legacy, :contacts
+
+  post 'contacts_paginated/:contact/acquaintances/add/:acquaintance' => 'acquaintanceships#link'
+  post 'contacts_paginated/:contact/acquaintances/remove/:acquaintance' => 'acquaintanceships#unlink'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

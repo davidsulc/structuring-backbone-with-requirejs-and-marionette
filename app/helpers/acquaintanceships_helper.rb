@@ -1,0 +1,2 @@
+module AcquaintanceshipsHelper
+end

@@ -1,4 +1,7 @@
 class Contact < ActiveRecord::Base
+  has_many :acquaintanceships
+  has_many :acquaintances, :through => :acquaintanceships
+
   validates :first_name, :presence => true
   validates :last_name, :length => { :minimum => 2 }
   validates :phone_number, :uniqueness => true, :allow_blank => true
