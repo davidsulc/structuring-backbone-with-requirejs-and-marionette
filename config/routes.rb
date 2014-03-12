@@ -11,6 +11,8 @@ ContactManager::Application.routes.draw do
   post 'contacts_paginated/:contact/acquaintances/add/:acquaintance' => 'acquaintanceships#link'
   post 'contacts_paginated/:contact/acquaintances/remove/:acquaintance' => 'acquaintanceships#unlink'
 
+  get 'languages/:language' => 'languages#translations'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
