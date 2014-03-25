@@ -8,6 +8,8 @@ requirejs.config({
     json2: "vendor/json2",
     localstorage: "vendor/backbone.localstorage",
     marionette: "vendor/backbone.marionette",
+    spin: "vendor/spin",
+    "spin.jquery": "vendor/spin.jquery",
     text: "vendor/text",
     tpl: "vendor/underscore-tpl",
     underscore: "vendor/underscore"
@@ -28,6 +30,7 @@ requirejs.config({
     },
     "jquery-ui": ["jquery"],
     localstorage: ["backbone"],
+    "spin.jquery": ["spin", "jquery"],
     tpl: ["text"]
   }
 });
