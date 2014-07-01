@@ -23,8 +23,6 @@ requirejs.config({
   }
 });
 
-require(["marionette"], function(bbm){
-  console.log("jQuery version: ", $.fn.jquery);
-  console.log("underscore identity call: ", _.identity(5));
-  console.log("Marionette: ", bbm);
+require(["app"], function(ContactManager){
+  ContactManager.start();
 });
