@@ -44,13 +44,14 @@ define(["marionette"], function(Marionette){
   });
 
   ContactManager.on("start", function(){
-    console.log("Contact Manager has started");
     if(Backbone.history){
-      Backbone.history.start();
+      require(["apps/contacts/contacts_app"], function () {
+        Backbone.history.start();
 
-      if(this.getCurrentRoute() === ""){
-        ContactManager.trigger("contacts:list");
-      }
+        if(ContactManager.getCurrentRoute() === ""){
+          ContactManager.trigger("contacts:list");
+        }
+      });
     }
   });
 

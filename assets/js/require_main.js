@@ -4,7 +4,10 @@ requirejs.config({
     backbone: "vendor/backbone",
     jquery: "vendor/jquery",
     json2: "vendor/json2",
+    localstorage: "vendor/backbone.localstorage",
     marionette: "vendor/backbone.marionette",
+    text: "vendor/text",
+    tpl: "vendor/underscore-tpl",
     underscore: "vendor/underscore"
   },
 
@@ -19,7 +22,9 @@ requirejs.config({
     marionette: {
       deps: ["backbone"],
       exports: "Marionette"
-    }
+    },
+    localstorage: ["backbone"],
+    tpl: ["text"]
   }
 });
 
