@@ -12,18 +12,21 @@ define(["app"], function(ContactManager){
       listContacts: function(criterion){
         require(["apps/contacts/list/list_controller"], function(ListController){
           ListController.listContacts(criterion);
+          ContactManager.execute("set:active:header", "contacts");
         });
       },
 
       showContact: function(id){
         require(["apps/contacts/show/show_controller"], function(ShowController){
           ShowController.showContact(id);
+          ContactManager.execute("set:active:header", "contacts");
         });
       },
 
       editContact: function(id){
         require(["apps/contacts/edit/edit_controller"], function(EditController){
           EditController.editContact(id);
+          ContactManager.execute("set:active:header", "contacts");
         });
       }
     };
