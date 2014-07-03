@@ -1,4 +1,4 @@
-define(["marionette"], function(Marionette){
+define(["marionette", "jquery-ui"], function(Marionette){
   var ContactManager = new Marionette.Application();
 
   ContactManager.navigate = function(route,  options){
