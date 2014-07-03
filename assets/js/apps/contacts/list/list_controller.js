@@ -1,85 +1,113 @@
 define(["app", "apps/contacts/list/list_view"], function(ContactManager, View){
   ContactManager.module("ContactsApp.List", function(List, ContactManager, Backbone, Marionette, $, _){
     List.Controller = {
-      listContacts: function(){
+      listContacts: function(criterion){
         require(["entities/contact"], function(){
           var fetchingContacts = ContactManager.request("contact:entities");
 
           var contactsListLayout = new View.Layout();
           var contactsListPanel = new View.Panel();
 
-          $.when(fetchingContacts).done(function(contacts){
-            var contactsListView = new View.Contacts({
-              collection: contacts
-            });
-
-            contactsListLayout.on("show", function(){
-              contactsListLayout.panelRegion.show(contactsListPanel);
-              contactsListLayout.contactsRegion.show(contactsListView);
-            });
-
-            contactsListPanel.on("contact:new", function(){
-              require(["apps/contacts/new/new_view"], function(NewView){
-                var newContact = ContactManager.request("contact:entity:new");
-
-                var view = new NewView.Contact({
-                  model: newContact
-                });
-
-                view.on("form:submit", function(data){
-                  if(contacts.length > 0){
-                    var highestId = contacts.max(function(c){ return c.id; }).get("id");
-                    data.id = highestId + 1;
-                  }
-                  else{
-                    data.id = 1;
-                  }
-                  if(newContact.save(data)){
-                    contacts.add(newContact);
-                    view.trigger("dialog:close");
-                    var newContactView = contactsListView.children.findByModel(newContact);
-                    // check whether the new contact view is displayed (it could be
-                    // invisible due to the current filter criterion)
-                    if(newContactView){
-                      newContactView.flash("success");
+          require(["entities/common"], function(FilteredCollection){
+            $.when(fetchingContacts).done(function(contacts){
+              var filteredContacts = ContactManager.Entities.FilteredCollection({
+                collection: contacts,
+                filterFunction: function(filterCriterion){
+                  var criterion = filterCriterion.toLowerCase();
+                  return function(contact){
+                    if(contact.get('firstName').toLowerCase().indexOf(criterion) !== -1
+                      || contact.get('lastName').toLowerCase().indexOf(criterion) !== -1
+                      || contact.get('phoneNumber').toLowerCase().indexOf(criterion) !== -1){
+                        return contact;
                     }
-                  }
-                  else{
-                    view.triggerMethod("form:data:invalid", newContact.validationError);
-                  }
-                });
-
-                ContactManager.regions.dialog.show(view);
+                  };
+                }
               });
-            });
 
-            contactsListView.on("childview:contact:edit", function(childView, args){
-              require(["apps/contacts/edit/edit_view"], function(EditView){
-                var model = args.model;
-                var view = new EditView.Contact({
-                  model: model
+              if(criterion){
+                filteredContacts.filter(criterion);
+                contactsListPanel.once("show", function(){
+                  contactsListPanel.triggerMethod("set:filter:criterion", criterion);
                 });
+              }
 
-                view.on("form:submit", function(data){
-                  if(model.save(data)){
-                    childView.render();
-                    view.trigger("dialog:close");
-                    childView.flash("success");
-                  }
-                  else{
-                    view.triggerMethod("form:data:invalid", model.validationError);
-                  }
-                });
-
-                ContactManager.regions.dialog.show(view);
+              var contactsListView = new View.Contacts({
+                collection: filteredContacts
               });
-            });
 
-            contactsListView.on("childview:contact:delete", function(childView, args){
-              args.model.destroy();
-            });
+              contactsListPanel.on("contacts:filter", function(filterCriterion){
+                filteredContacts.filter(filterCriterion);
+                ContactManager.trigger("contacts:filter", filterCriterion);
+              });
 
-            ContactManager.regions.main.show(contactsListLayout);
+              contactsListLayout.on("show", function(){
+                contactsListLayout.panelRegion.show(contactsListPanel);
+                contactsListLayout.contactsRegion.show(contactsListView);
+              });
+
+              contactsListPanel.on("contact:new", function(){
+                require(["apps/contacts/new/new_view"], function(NewView){
+                  var newContact = ContactManager.request("contact:entity:new");
+
+                  var view = new NewView.Contact({
+                    model: newContact
+                  });
+
+                  view.on("form:submit", function(data){
+                    if(contacts.length > 0){
+                      var highestId = contacts.max(function(c){ return c.id; }).get("id");
+                      data.id = highestId + 1;
+                    }
+                    else{
+                      data.id = 1;
+                    }
+                    if(newContact.save(data)){
+                      contacts.add(newContact);
+                      view.trigger("dialog:close");
+                      var newContactView = contactsListView.children.findByModel(newContact);
+                      // check whether the new contact view is displayed (it could be
+                      // invisible due to the current filter criterion)
+                      if(newContactView){
+                        newContactView.flash("success");
+                      }
+                    }
+                    else{
+                      view.triggerMethod("form:data:invalid", newContact.validationError);
+                    }
+                  });
+
+                  ContactManager.regions.dialog.show(view);
+                });
+              });
+
+              contactsListView.on("childview:contact:edit", function(childView, args){
+                require(["apps/contacts/edit/edit_view"], function(EditView){
+                  var model = args.model;
+                  var view = new EditView.Contact({
+                    model: model
+                  });
+
+                  view.on("form:submit", function(data){
+                    if(model.save(data)){
+                      childView.render();
+                      view.trigger("dialog:close");
+                      childView.flash("success");
+                    }
+                    else{
+                      view.triggerMethod("form:data:invalid", model.validationError);
+                    }
+                  });
+
+                  ContactManager.regions.dialog.show(view);
+                });
+              });
+
+              contactsListView.on("childview:contact:delete", function(childView, args){
+                args.model.destroy();
+              });
+
+              ContactManager.regions.main.show(contactsListLayout);
+            });
           });
         });
       }
