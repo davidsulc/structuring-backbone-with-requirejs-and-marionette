@@ -83,6 +83,10 @@ define(["app", "apps/contacts/list/list_view"], function(ContactManager, View){
                 });
               });
 
+              contactsListView.on("childview:contact:show", function(childView, args){
+                ContactManager.trigger("contact:show", args.model.get("id"));
+              });
+
               contactsListView.on("childview:contact:edit", function(childView, args){
                 require(["apps/contacts/edit/edit_view"], function(EditView){
                   var model = args.model;
